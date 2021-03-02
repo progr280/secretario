@@ -6,12 +6,12 @@ class DbUtil {
     return openDatabase(
       join(await getDatabasesPath(), 'secretario.db'),
       onCreate: (db, version) async {
-        print('===> Criando tabela relatorios');
-        await db.execute("CREATE TABLE relatorios("
+        await db.execute("CREATE TABLE publicadores("
             "id TEXT PRIMARY KEY,"
-            "mes TEXT,"
             "nome TEXT,"
             "regular BOOL,"
+            "dirigente BOOL,"
+            "grupo TEXT,"
             "publicacoes INT,"
             "videos INT,"
             "horas INT,"
@@ -19,15 +19,6 @@ class DbUtil {
             "estudos INT,"
             "observacao STRING"
             ")");
-        print('===> Criando tabela publicadores');
-        await db.execute("CREATE TABLE publicadores("
-            "id TEXT PRIMARY KEY,"
-            "nome TEXT,"
-            "regular BOOL,"
-            "dirigente BOOL,"
-            "grupo TEXT"
-            ")");
-        print('===> Tabelas criadas');
       },
       version: 1,
     );
@@ -51,6 +42,11 @@ class DbUtil {
       whereArgs: [data['id']],
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  static Future<void> delete(String table, String id) async {
+    final db = await DbUtil.database();
+    await db.delete(table, where: 'id = ?', whereArgs: [id]);
   }
 
   static Future<List<Map<String, dynamic>>> getData(String table) async {

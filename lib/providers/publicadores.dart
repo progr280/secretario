@@ -67,6 +67,11 @@ class Publicadores with ChangeNotifier {
     });
     notifyListeners();
   }
+
+  Future<void> deletePublicador(Publicador publicador) async {
+    DbUtil.delete('publicadores', publicador.id);
+    notifyListeners();
+  }
 }
 
 bool intToBool(int i) => i == 0 ? false : true;

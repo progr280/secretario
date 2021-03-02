@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:secretario/providers/relatorios.dart';
 import 'package:secretario/telas/telaPublicador.dart';
 import 'package:secretario/telas/telaPublicadores.dart';
 
@@ -17,15 +16,8 @@ void main() {
 class AppSecretario extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => new Publicadores(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => new Relatorios(),
-        ),
-      ],
+    return ChangeNotifierProvider(
+      create: (_) => new Publicadores(),
       child: MaterialApp(
         title: "Secretário",
         initialRoute: Routes.TELA_PRINCIPAL,

@@ -97,16 +97,69 @@ class _TelaPublicadoresState extends State<TelaPublicadores> {
             child: ListView.builder(
               itemCount: publicadores.length,
               itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            TelaPublicador(publicador: publicadores[index]),
-                      ),
-                    );
+                return Dismissible(
+                  key: ValueKey(publicadores[index].id),
+                  background: Container(
+                    padding: EdgeInsets.only(left: 16),
+                    alignment: Alignment.centerLeft,
+                    color: Theme.of(context).accentColor,
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                  ),
+                  secondaryBackground: Container(
+                    padding: EdgeInsets.only(right: 16),
+                    alignment: Alignment.centerRight,
+                    color: Theme.of(context).errorColor,
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                  confirmDismiss: (direction) {
+                    if (direction == DismissDirection.endToStart) {
+                      return showDialog(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          title: Text('Excluir publicador'),
+                          content: Text(
+                              'Tem certeza que deseja excluir esse publicador?'),
+                          actions: [
+                            FlatButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop(false);
+                              },
+                              child: Text('Não'),
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                Navigator.of(ctx).pop(true);
+                                Provider.of<Publicadores>(context,
+                                        listen: false)
+                                    .deletePublicador(publicadores[index]);
+                                Provider.of<Publicadores>(context,
+                                        listen: false)
+                                    .carregarDados();
+                              },
+                              child: Text('Sim'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              TelaPublicador(publicador: publicadores[index]),
+                        ),
+                      );
+                    }
                   },
                   child: ListTile(
+                    onTap: () {
+                      print(publicadores[index].nome);
+                    },
                     title: Text(publicadores[index].nome),
                   ),
                 );
