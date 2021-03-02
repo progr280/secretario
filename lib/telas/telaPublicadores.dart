@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:secretario/providers/publicador.dart';
 import 'package:secretario/providers/publicadores.dart';
 import 'package:secretario/telas/telaPublicador.dart';
+import 'package:secretario/telas/telaRelatorio.dart';
 
 class TelaPublicadores extends StatefulWidget {
   @override
@@ -158,7 +159,12 @@ class _TelaPublicadoresState extends State<TelaPublicadores> {
                   },
                   child: ListTile(
                     onTap: () {
-                      print(publicadores[index].nome);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              TelaRelatorio(publicador: publicadores[index]),
+                        ),
+                      );
                     },
                     title: Text(publicadores[index].nome),
                   ),

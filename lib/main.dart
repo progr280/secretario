@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:secretario/telas/telaPublicador.dart';
 import 'package:secretario/telas/telaPublicadores.dart';
+import 'package:secretario/telas/telaRelatorio.dart';
 
 import 'package:secretario/utils/routes.dart';
 
@@ -26,6 +27,7 @@ class AppSecretario extends StatelessWidget {
           Routes.TELA_PRINCIPAL: (ctx) => TelaPrincipal(),
           Routes.TELA_PUBLICADORES: (ctx) => TelaPublicadores(),
           Routes.TELA_PUBLICADOR: (ctx) => TelaPublicador(),
+          Routes.TELA_RELATORIO: (ctx) => TelaRelatorio(),
         },
       ),
     );

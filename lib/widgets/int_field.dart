@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 
 class MyIntField extends StatefulWidget {
   final String titulo;
-  final int valor;
+  final TextEditingController controller;
 
-  MyIntField({this.titulo, this.valor});
+  MyIntField({this.titulo, this.controller});
 
   @override
   _MyIntFieldState createState() => _MyIntFieldState();
 }
 
 class _MyIntFieldState extends State<MyIntField> {
-  String titulo;
   int valor;
 
   @override
   void initState() {
     super.initState();
-    valor = widget.valor;
+    valor = 0;
   }
 
   @override
@@ -30,13 +29,14 @@ class _MyIntFieldState extends State<MyIntField> {
           child: Icon(Icons.add),
           onPressed: () {
             setState(() {
-              valor++;
+              widget.controller.text = '10';
+              //incrementa
             });
           },
         ),
       ),
       title: Text(widget.titulo),
-      subtitle: Text(valor.toString()),
+      subtitle: Text(widget.controller.text),
       trailing: Container(
         width: 60,
         height: 60,
@@ -44,7 +44,7 @@ class _MyIntFieldState extends State<MyIntField> {
           child: Icon(Icons.remove),
           onPressed: () {
             setState(() {
-              valor--;
+              //decrementa
             });
           },
         ),
