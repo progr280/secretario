@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:secretario/providers/publicador.dart';
+import 'package:secretario/models/publicador.dart';
 import 'package:secretario/providers/publicadores.dart';
 
 class TelaPublicador extends StatefulWidget {
@@ -16,21 +16,22 @@ class TelaPublicador extends StatefulWidget {
 
 class _TelaPublicadorState extends State<TelaPublicador> {
   final _formKey = GlobalKey<FormState>();
-
   TextEditingController txtNome = TextEditingController();
   TextEditingController txtGrupo = TextEditingController();
-  bool regular;
-  bool dirigente;
+  bool pioneiroRegular;
+  bool pioneiroAuxiliarPorTempoIndeterminado;
+  bool dirigente = false;
   List<Publicador> dirigentes;
 
   @override
   void initState() {
     super.initState();
     txtNome.text = widget.publicador.nome;
-    regular = widget.publicador.regular;
+    pioneiroRegular = widget.publicador.pioneiroRegular;
+    pioneiroAuxiliarPorTempoIndeterminado =
+        widget.publicador.pioneiroAuxiliarPorTempoIndeterminado;
     dirigente = widget.publicador.dirigente;
     txtGrupo.text = widget.publicador.grupo;
-    print(widget.publicador.grupo);
   }
 
   @override
@@ -60,10 +61,10 @@ class _TelaPublicadorState extends State<TelaPublicador> {
           Container(
             child: ListTile(
               leading: Checkbox(
-                value: regular,
+                value: pioneiroRegular,
                 onChanged: (value) {
                   setState(() {
-                    regular = value;
+                    pioneiroRegular = value;
                   });
                 },
               ),
@@ -79,20 +80,6 @@ class _TelaPublicadorState extends State<TelaPublicador> {
                       setState(() {
                         txtGrupo.text = '';
                       });
-
-                      showDialog(
-                          context: context,
-                          child: AlertDialog(
-                            content: Text(
-                                "Antes de ativar essa opção, informe o nome do publicador."),
-                            actions: [
-                              FlatButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text("OK"))
-                            ],
-                          ));
                     } else {
                       setState(() {
                         dirigente = value;
@@ -158,21 +145,21 @@ class _TelaPublicadorState extends State<TelaPublicador> {
               Publicador novoPublicador = Publicador(
                   id: Random().nextDouble().toString(),
                   nome: txtNome.text,
-                  regular: regular,
+                  pioneiroRegular: pioneiroRegular,
                   dirigente: dirigente,
                   grupo: txtGrupo.text);
               Provider.of<Publicadores>(context, listen: false)
-                  .addPublicador(novoPublicador);
+                  .createPublicador(novoPublicador);
             } else {
               Publicador publicadorModificado = Publicador(
                 id: widget.publicador.id,
                 nome: txtNome.text,
-                regular: regular,
+                pioneiroRegular: pioneiroRegular,
                 dirigente: dirigente,
                 grupo: txtGrupo.text,
               );
-              Provider.of<Publicadores>(context, listen: false)
-                  .updatePublicador(publicadorModificado);
+              // Provider.of<Publicadores>(context, listen: false)
+              //     .(publicadorModificado);
             }
             Provider.of<Publicadores>(context, listen: false).carregarDados();
             Navigator.pop(context);

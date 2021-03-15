@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:secretario/telas/telaPublicador.dart';
-import 'package:secretario/telas/telaPublicadores.dart';
-import 'package:secretario/telas/telaRelatorio.dart';
-
-import 'package:secretario/utils/routes.dart';
-
 import 'package:secretario/providers/publicadores.dart';
+import 'package:secretario/views/telaPrincipal.dart';
+import 'package:secretario/views/telaPublicador.dart';
+import 'package:secretario/views/telaPublicadores.dart';
 
-import 'package:secretario/telas/telaPrincipal.dart';
+import 'common/routes.dart';
 
 void main() {
   runApp(AppSecretario());
@@ -20,15 +17,14 @@ class AppSecretario extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => new Publicadores(),
       child: MaterialApp(
-        title: "Secretário",
+        routes: {
+          Routes.TELA_PRINCIPAL: (ctc) => TelaPrincipal(),
+          Routes.TELA_PUBLICADORES: (ctc) => TelaPublicadores(),
+          Routes.TELA_PUBLICADOR: (ctc) => TelaPublicador(),
+        },
         initialRoute: Routes.TELA_PRINCIPAL,
         debugShowCheckedModeBanner: false,
-        routes: {
-          Routes.TELA_PRINCIPAL: (ctx) => TelaPrincipal(),
-          Routes.TELA_PUBLICADORES: (ctx) => TelaPublicadores(),
-          Routes.TELA_PUBLICADOR: (ctx) => TelaPublicador(),
-          Routes.TELA_RELATORIO: (ctx) => TelaRelatorio(),
-        },
+        title: "Secretário",
       ),
     );
   }

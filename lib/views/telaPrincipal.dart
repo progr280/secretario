@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:secretario/common/routes.dart';
 import 'package:secretario/providers/publicadores.dart';
-import 'package:secretario/utils/routes.dart';
 
 class TelaPrincipal extends StatelessWidget {
   @override

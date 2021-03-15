@@ -1,23 +1,33 @@
-import 'package:flutter/material.dart';
-import 'package:secretario/utils/db_util.dart';
-import './publicador.dart';
+import 'package:flutter/foundation.dart';
+import 'package:secretario/common/db.dart';
+import 'package:secretario/models/publicador.dart';
 
-class Publicadores with ChangeNotifier {
+class Publicadores extends ChangeNotifier {
   List<Publicador> _publicadores = [];
 
   Future<void> carregarDados() async {
-    List dados = await DbUtil.getData('publicadores');
+    List dados = await Db.getData('publicadores');
 
-    _publicadores = dados
-        .map((item) => Publicador(
-            id: item['id'],
-            nome: item['nome'],
-            regular: intToBool(item['regular']),
-            dirigente: intToBool(item['dirigente']),
-            grupo: item['grupo']))
-        .toList();
-
-    notifyListeners();
+    _publicadores = dados.map((item) {
+      return Publicador(
+        id: item['id'],
+        nome: item['nome'],
+        grupo: item['grupo'],
+        dirigente: intToBool(item['dirigente']),
+        pioneiroRegular: intToBool(item['pioneiro_regular']),
+        pioneiroAuxiliarPorTempoIndeterminado:
+            intToBool(item['pioneiro_auxiliar_tempo_indeterminado']),
+        pioneiroAuxiliar: intToBool(item['pioneiro_auxiliar']),
+        publicacoes: item['publicacoes'],
+        videos: item['videos'],
+        horas: item['horas'],
+        revisitas: item['revisitas'],
+        estudos: item['estudos'],
+        participou: intToBool(item['participou']),
+        observacao: item['observacao'],
+        compilado: intToBool(item['compilado']),
+      );
+    }).toList();
   }
 
   List<Publicador> get publicadores {
@@ -29,6 +39,7 @@ class Publicadores with ChangeNotifier {
           .toLowerCase()
           .compareTo(b.nome.toString().toLowerCase());
     });
+
     return lista;
   }
 
@@ -40,36 +51,28 @@ class Publicadores with ChangeNotifier {
     return _publicadores.where((element) => element.dirigente).toList();
   }
 
-  Publicador itemByIndex(int index) {
-    return _publicadores[index];
-  }
-
-  Future<void> addPublicador(Publicador novoPublicador) async {
-    _publicadores.add(novoPublicador);
-    DbUtil.insert('publicadores', {
-      'id': novoPublicador.id,
-      'nome': novoPublicador.nome,
-      'regular': novoPublicador.regular,
-      'dirigente': novoPublicador.dirigente,
-      'grupo':
-          novoPublicador.dirigente ? novoPublicador.nome : novoPublicador.grupo
-    });
-    notifyListeners();
-  }
-
-  Future<void> updatePublicador(Publicador publicador) async {
-    DbUtil.update('publicadores', {
+  Future<void> createPublicador(Publicador publicador) async {
+    Db.insert('publicadores', {
       'id': publicador.id,
       'nome': publicador.nome,
-      'regular': publicador.regular,
+      'grupo': publicador.dirigente ? publicador.nome : publicador.grupo,
       'dirigente': publicador.dirigente,
-      'grupo': publicador.dirigente ? publicador.nome : publicador.grupo
+      'pioneiro_regular': publicador.pioneiroRegular,
+      'pioneiro_auxiliar_tempo_indeterminado':
+          publicador.pioneiroAuxiliarPorTempoIndeterminado,
+      'pioneiro_auxiliar': publicador.pioneiroAuxiliarPorTempoIndeterminado
+          ? true
+          : publicador.pioneiroAuxiliarPorTempoIndeterminado,
+      'publicacoes': publicador.publicacoes,
+      'videos': publicador.videos,
+      'horas': publicador.horas,
+      'revisitas': publicador.revisitas,
+      'estudos': publicador.estudos,
+      'participou': publicador.participou,
+      'observacao': publicador.observacao,
+      'compilado': publicador.compilado
     });
-    notifyListeners();
-  }
-
-  Future<void> deletePublicador(Publicador publicador) async {
-    DbUtil.delete('publicadores', publicador.id);
+    _publicadores.add(publicador);
     notifyListeners();
   }
 }

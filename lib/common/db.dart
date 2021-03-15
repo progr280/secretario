@@ -1,7 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DbUtil {
+class Db {
   static Future<Database> database() async {
     return openDatabase(
       join(await getDatabasesPath(), 'secretario.db'),
@@ -9,23 +9,32 @@ class DbUtil {
         await db.execute("CREATE TABLE publicadores("
             "id TEXT PRIMARY KEY,"
             "nome TEXT,"
-            "regular BOOL,"
-            "dirigente BOOL,"
             "grupo TEXT,"
+            "dirigente BOOL,"
+            "pioneiro_regular BOOL,"
+            "pioneiro_auxiliar_tempo_indeterminado BOOL,"
+            "pioneiro_auxiliar BOOL,"
             "publicacoes INT,"
             "videos INT,"
             "horas INT,"
             "revisitas INT,"
             "estudos INT,"
-            "observacao STRING"
+            "participou BOOL,"
+            "observacao STRING,"
+            "compilado BOOL"
             ")");
       },
       version: 1,
     );
   }
 
+  static Future<List<Map<String, dynamic>>> getData(String table) async {
+    final db = await Db.database();
+    return db.query(table);
+  }
+
   static Future<void> insert(String table, Map<String, Object> data) async {
-    final db = await DbUtil.database();
+    final db = await Db.database();
     await db.insert(
       table,
       data,
@@ -34,7 +43,7 @@ class DbUtil {
   }
 
   static Future<void> update(String table, Map<String, Object> data) async {
-    final db = await DbUtil.database();
+    final db = await Db.database();
     await db.update(
       table,
       data,
@@ -45,12 +54,7 @@ class DbUtil {
   }
 
   static Future<void> delete(String table, String id) async {
-    final db = await DbUtil.database();
+    final db = await Db.database();
     await db.delete(table, where: 'id = ?', whereArgs: [id]);
-  }
-
-  static Future<List<Map<String, dynamic>>> getData(String table) async {
-    final db = await DbUtil.database();
-    return db.query(table);
   }
 }
