@@ -4,6 +4,8 @@ import 'package:secretario/providers/publicadores.dart';
 import 'package:secretario/views/telaPrincipal.dart';
 import 'package:secretario/views/telaPublicador.dart';
 import 'package:secretario/views/telaPublicadores.dart';
+import 'package:secretario/views/telaRelatorio.dart';
+import 'package:secretario/views/telaRelatorios.dart';
 
 import 'common/routes.dart';
 
@@ -21,6 +23,8 @@ class AppSecretario extends StatelessWidget {
           Routes.TELA_PRINCIPAL: (ctc) => TelaPrincipal(),
           Routes.TELA_PUBLICADORES: (ctc) => TelaPublicadores(),
           Routes.TELA_PUBLICADOR: (ctc) => TelaPublicador(),
+          Routes.TELA_RELATORIOS: (ctc) => TelaRelatorios(),
+          Routes.TELA_RELATORIO: (ctc) => TelaRelatorio(),
         },
         initialRoute: Routes.TELA_PRINCIPAL,
         debugShowCheckedModeBanner: false,

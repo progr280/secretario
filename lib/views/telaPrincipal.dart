@@ -19,7 +19,7 @@ class TelaPrincipal extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.ballot),
             onPressed: () {
-              Navigator.pushNamed(context, Routes.TELA_PUBLICADORES);
+              Navigator.pushNamed(context, Routes.TELA_RELATORIOS);
             },
           ),
         ],
