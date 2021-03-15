@@ -76,14 +76,21 @@ class _TelaPublicadorState extends State<TelaPublicador> {
               leading: Checkbox(
                   value: dirigente,
                   onChanged: (value) {
-                    if (txtNome.text.isEmpty) {
-                      setState(() {
-                        txtGrupo.text = '';
-                      });
+                    if (value) {
+                      if (txtNome.text.isEmpty) {
+                        setState(() {
+                          txtGrupo.text = '';
+                        });
+                      } else {
+                        setState(() {
+                          dirigente = value;
+                          txtGrupo.text = txtNome.text;
+                        });
+                      }
                     } else {
                       setState(() {
                         dirigente = value;
-                        txtGrupo.text = txtNome.text;
+                        txtGrupo.text = '';
                       });
                     }
                   }),
@@ -102,37 +109,39 @@ class _TelaPublicadorState extends State<TelaPublicador> {
                 return null;
               },
               readOnly: true,
-              onTap: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return Container(
-                      height: 300,
-                      child: Column(children: [
-                        ListTile(
-                          title: Text(
-                            "Selecione o grupo:",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: dirigentes.length,
-                            itemBuilder: (context, item) {
-                              return ListTile(
-                                title: Text(dirigentes[item].nome),
-                                onTap: () {
-                                  setState(() {
-                                    txtGrupo.text = dirigentes[item].nome;
-                                  });
-                                  Navigator.of(context).pop();
+              onTap: () => dirigente
+                  ? null
+                  : showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return Container(
+                          height: 300,
+                          child: Column(children: [
+                            ListTile(
+                              title: Text(
+                                "Selecione o grupo:",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: dirigentes.length,
+                                itemBuilder: (context, item) {
+                                  return ListTile(
+                                    title: Text(dirigentes[item].nome),
+                                    onTap: () {
+                                      setState(() {
+                                        txtGrupo.text = dirigentes[item].nome;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                  );
                                 },
-                              );
-                            },
-                          ),
-                        ),
-                      ]),
-                    );
-                  }),
+                              ),
+                            ),
+                          ]),
+                        );
+                      }),
             ),
           ),
         ]),
@@ -158,8 +167,8 @@ class _TelaPublicadorState extends State<TelaPublicador> {
                 dirigente: dirigente,
                 grupo: txtGrupo.text,
               );
-              // Provider.of<Publicadores>(context, listen: false)
-              //     .(publicadorModificado);
+              Provider.of<Publicadores>(context, listen: false)
+                  .updatePublicador(publicadorModificado);
             }
             Provider.of<Publicadores>(context, listen: false).carregarDados();
             Navigator.pop(context);

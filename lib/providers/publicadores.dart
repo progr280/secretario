@@ -28,6 +28,8 @@ class Publicadores extends ChangeNotifier {
         compilado: intToBool(item['compilado']),
       );
     }).toList();
+
+    notifyListeners();
   }
 
   List<Publicador> get publicadores {
@@ -73,7 +75,40 @@ class Publicadores extends ChangeNotifier {
       'compilado': publicador.compilado
     });
     _publicadores.add(publicador);
-    notifyListeners();
+    carregarDados();
+  }
+
+  Publicador readPublicador(int index) {
+    return _publicadores[index];
+  }
+
+  Future<void> updatePublicador(Publicador publicador) async {
+    Db.update('publicadores', {
+      'id': publicador.id,
+      'nome': publicador.nome,
+      'grupo': publicador.dirigente ? publicador.nome : publicador.grupo,
+      'dirigente': publicador.dirigente,
+      'pioneiro_regular': publicador.pioneiroRegular,
+      'pioneiro_auxiliar_tempo_indeterminado':
+          publicador.pioneiroAuxiliarPorTempoIndeterminado,
+      'pioneiro_auxiliar': publicador.pioneiroAuxiliarPorTempoIndeterminado
+          ? true
+          : publicador.pioneiroAuxiliarPorTempoIndeterminado,
+      'publicacoes': publicador.publicacoes,
+      'videos': publicador.videos,
+      'horas': publicador.horas,
+      'revisitas': publicador.revisitas,
+      'estudos': publicador.estudos,
+      'participou': publicador.participou,
+      'observacao': publicador.observacao,
+      'compilado': publicador.compilado
+    });
+    carregarDados();
+  }
+
+  Future<void> deletePublicador(Publicador publicador) async {
+    Db.delete('publicadores', publicador.id);
+    carregarDados();
   }
 }
 
