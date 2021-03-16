@@ -13,17 +13,29 @@ class TelaRelatorio extends StatefulWidget {
 
 class _TelaRelatorioState extends State<TelaRelatorio> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController txtPublicacoes,
-      txtVideos,
-      txtHoras,
-      txtRevisitas,
-      txtEstudos,
-      txtObservacao;
+  TextEditingController txtPublicacoes = new TextEditingController();
+  TextEditingController txtVideos = new TextEditingController();
+  TextEditingController txtHoras = new TextEditingController();
+  TextEditingController txtRevisitas = new TextEditingController();
+  TextEditingController txtEstudos = new TextEditingController();
+  TextEditingController txtObservacao = new TextEditingController();
 
   bool participou = false;
 
   @override
+  void initState() {
+    super.initState();
+    txtPublicacoes.text = '';
+    txtVideos.text = '';
+    txtHoras.text = '';
+    txtRevisitas.text = '';
+    txtEstudos.text = '';
+    txtObservacao.text = '';
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print(txtRevisitas);
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.publicador.nome}"),
@@ -128,7 +140,29 @@ class _TelaRelatorioState extends State<TelaRelatorio> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (_formKey.currentState.validate()) {}
+          print("Estudos: ${txtHoras.value}");
+          return null;
+          if (_formKey.currentState.validate()) {
+            if (int.parse(txtRevisitas.text) < int.parse(txtEstudos.text)) {
+              print("Erro nas revisitas");
+              return showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                        title: Text('Atenção'),
+                        content: Text(
+                            "A quantidade de revisitas informada está incorreta."),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text("OK"))
+                        ],
+                      ));
+            } else {
+              print("Tudo ok");
+            }
+          }
         },
         child: Icon(Icons.save),
       ),
